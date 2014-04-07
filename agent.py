@@ -28,7 +28,7 @@ class Agent:
         # metabolism
         self.metabolism = 1
         # vision
-        self.vision = 3
+        self.vision = 1
         
     def move(self, r, c):
         # only move if target is empty
@@ -36,15 +36,14 @@ class Agent:
             print "Trying to move to occupied cell, aborting."
             return
         # otherwise move from current position to desired position
-        if self.name == self.env.field[self.r, self.c]:
-            self.env.field[self.r][self.c] = ""
+        self.env.field[self.r, self.c] = ""
         self.env.field[r, c] = self.name
         self.r, self.c = r, c
 
     def eat(self, r, c):
         # take sugar at given spot and add to own sugar score
-        self.sugar += self.env.sugar[r,c]
-        self.env.sugar[r,c] = 0
+        self.sugar += self.env.sugar[r,c,0]
+        self.env.sugar[r,c,0] = 0
 
     def live(self, ):
         # update attributes...

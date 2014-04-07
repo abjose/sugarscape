@@ -52,13 +52,13 @@ class Environment:
         self.agents[a.name] = a
         # VERIFY WON'T GET MODIFIED...
 
-    def get_neighborhood(self, r, c, d, include_self=True):
+    def get_neighborhood(self, r, c, d): #, include_self=True):
         # get a distance-d Von Neumann neighborhood around (r,c)
         # more efficient way to do this?
         hood = []
         for i in range(-d,d+1):
             for j in range(-d,d+1):
-                if abs(i)+abs(j) <= d:
+                if abs(i)+abs(j) <= d and not (i == 0 and j == 0):
                     # wrap around for torus
                     hood.append(((r+i)%self.side, (c+j)%self.side))
         # shuffle so not always looking at same place first
@@ -85,9 +85,7 @@ if __name__=='__main__':
     v = Viewer(1,1, e.side,e.side)
     
     for _ in range(10):
-        print 'adding agent'
         e.add_agent()
-        print e.agents
 
     t = 0
     while True:
@@ -95,3 +93,4 @@ if __name__=='__main__':
         t += 1
         e.tick()
         v.display(e.get_color_matrix())
+    
