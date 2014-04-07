@@ -47,9 +47,15 @@ class Environment:
         pass
 
     def get_neighborhood(self, r, c, d, include_self=True):
-        # get a d-diameter Von Neumann neighborhood, return as list of Patches
-        # first constrain bounds
-        pass
+        # get a distance-d Von Neumann neighborhood around (r,c)
+        # more efficient way to do this?
+        hood = []
+        for i in range(-d,d+1):
+            for j in range(-d,d+1):
+                if abs(i)+abs(j) <= d:
+                    # wrap around for torus
+                    hood.append(((r+i)%self.side, (c+j)%self.side))
+        return hood
 
     def get_color_matrix(self):
         # return numpy matrix representation of colors of field
@@ -68,13 +74,13 @@ if __name__=='__main__':
     from viewer import Viewer
 
     e = Environment(500)
-    v = Viewer(1,1, e.side,e.side)
+    #v = Viewer(1,1, e.side,e.side)
     
-    t = 0
+    #t = 0
+    #while True:
+    #    print 'tick', t
+    #    t += 1
+    #    e.tick()
+    #    v.display(e.get_color_matrix())
 
-    while True:
-        print 'tick', t
-        t += 1
-        e.tick()
-        v.display(e.get_color_matrix())
-
+    print e.get_neighborhood(0,0,2)
