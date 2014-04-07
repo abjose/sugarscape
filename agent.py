@@ -21,7 +21,7 @@ class Agent:
         self.env = environment
         self.r, self.c = r, c
         # place self in environment
-        self.move_self(r, c)
+        self.move(r, c)
 
         # sugar endowment
         self.sugar = 5
@@ -30,7 +30,7 @@ class Agent:
         # vision
         self.vision = 3
         
-    def move_self(self, r, c):
+    def move(self, r, c):
         # only move if target is empty
         if self.env.field[r, c] != "":
             print "Trying to move to occupied cell, aborting."
@@ -41,8 +41,31 @@ class Agent:
         self.env.field[r, c] = self.name
         self.r, self.c = r, c
 
+    def eat(self, r, c):
+        # take sugar at given spot and add to own sugar score
+        self.sugar += self.env.sugar[r,c]
+        self.env.sugar[r,c] = 0
+
+    def live(self, ):
+        # update attributes...
+
+    def greedy_strategy(self, ):
+        # find best spot
+        best_sugar = -1
+        best_spot = None
+        for r,c in self.env.get_neighborhood(self.r, self.c, self.vision):
+            s = self.env.sugar[r,c]
+            if s > best_sugar:
+                best_sugar = s
+                best_spot = r,c
+
+        # move there and eat sugar
+        self.move(*best_spot)
+        self.eat(*best_spot)
+        
+
     def tick(self):
-        pass
+        self.greedy_strategy()
     
     def get_color(self):
         pass
