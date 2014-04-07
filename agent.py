@@ -72,10 +72,10 @@ class Agent:
 
 
 if __name__=='__main__':
-    a = Agent(1,1,1,1)
-    b = Agent(1,1,1,1)
-    b = Agent(1,1,1,1)
-    b = Agent(1,1,1,1)
-    b = Agent(1,1,1,1)
+    a = Agent(1,1,1)
+    b = Agent(1,1,1)
+    b = Agent(1,1,1)
+    b = Agent(1,1,1)
+    b = Agent(1,1,1)
 
     print agent_count
