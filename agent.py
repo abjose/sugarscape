@@ -31,12 +31,15 @@ class Agent:
         self.vision = 3
         
     def move_self(self, r, c):
-        # move from current position to desired position
-        #if self.name in self.env.field[self.r][self.c].agents:
-        #    self.env.field[self.r][self.c].agents.remove(self.name)
-        #self.env.field[r][c].agents.append(self.name)
-        #self.r, self.c = r, c
-        pass
+        # only move if target is empty
+        if self.env.field[r, c] != "":
+            print "Trying to move to occupied cell, aborting."
+            return
+        # otherwise move from current position to desired position
+        if self.name == self.env.field[self.r, self.c]:
+            self.env.field[self.r][self.c] = ""
+        self.env.field[r, c] = self.name
+        self.r, self.c = r, c
 
     def tick(self):
         pass
