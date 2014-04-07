@@ -4,6 +4,7 @@ Simulated environment.
 """
 
 import numpy as np
+from random import shuffle
 
 from agent import Agent
 
@@ -21,7 +22,7 @@ class Environment:
         self.agents = dict()
 
         # keep track of resources as vectors of (current, rate, max)
-        # consider enclosing this in a function?
+        # consider enclosing this in a function
         self.sugar = np.zeros((s, s, 3))
         # set current
         self.sugar[:,:,0] = 0#np.random.randint(0, 25, (s, s))
@@ -31,20 +32,25 @@ class Environment:
         self.sugar[:,:,2] = 500
 
     def tick_resources(self, ):
-        # maybe keep a list of resources to shorter if have lots?
+        # maybe keep a list of resources to make shorter if have lots?
         self.sugar[:,:,0] = np.minimum(self.sugar[:,:,0]+self.sugar[:,:,1],
                                        self.sugar[:,:,2])
 
     def tick(self, ):
         # tick everything
         self.tick_resources()
+        # update agents in random order
+        agents = [agent for name,agent in self.agents.items()]
+        shuffle(agents)
+        for agent in agents:
+            agent.tick()
 
     def add_agent(self, ):
-        # UPDATE
         # add an agent to a random location?
-        #r, c = np.random.randint(0, self.side, 2)
-        #a = Agent(self, uuid1().bytes, r, c)
-        pass
+        r, c = np.random.randint(0, self.side, 2)
+        a = Agent(self, r, c)
+        self.agents[a.name] = a
+        # VERIFY WON'T GET MODIFIED...
 
     def get_neighborhood(self, r, c, d, include_self=True):
         # get a distance-d Von Neumann neighborhood around (r,c)
@@ -55,6 +61,8 @@ class Environment:
                 if abs(i)+abs(j) <= d:
                     # wrap around for torus
                     hood.append(((r+i)%self.side, (c+j)%self.side))
+        # shuffle so not always looking at same place first
+        shuffle(hood)
         return hood
 
     def get_color_matrix(self):
@@ -74,13 +82,16 @@ if __name__=='__main__':
     from viewer import Viewer
 
     e = Environment(500)
-    #v = Viewer(1,1, e.side,e.side)
+    v = Viewer(1,1, e.side,e.side)
     
-    #t = 0
-    #while True:
-    #    print 'tick', t
-    #    t += 1
-    #    e.tick()
-    #    v.display(e.get_color_matrix())
+    for _ in range(10):
+        print 'adding agent'
+        e.add_agent()
+        print e.agents
 
-    print e.get_neighborhood(0,0,2)
+    t = 0
+    while True:
+        print 'tick', t
+        t += 1
+        e.tick()
+        v.display(e.get_color_matrix())

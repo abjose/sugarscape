@@ -48,13 +48,14 @@ class Agent:
 
     def live(self, ):
         # update attributes...
+        pass
 
     def greedy_strategy(self, ):
         # find best spot
         best_sugar = -1
         best_spot = None
         for r,c in self.env.get_neighborhood(self.r, self.c, self.vision):
-            s = self.env.sugar[r,c]
+            s = self.env.sugar[r,c,0]
             if s > best_sugar:
                 best_sugar = s
                 best_spot = r,c
