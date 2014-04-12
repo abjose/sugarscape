@@ -3,6 +3,8 @@
 Agents for the sugarscape.
 """
 
+import numpy as np
+
 # make lots of agents, each with more abilities? Or just make it 
 # very easy to disable abilities?
 
@@ -24,11 +26,11 @@ class Agent:
         self.move(r, c)
 
         # sugar endowment
-        self.sugar = 5
+        self.sugar = np.random.randint(5,26)
         # metabolism
-        self.metabolism = 1
+        self.sugar_metabolism = np.random.randint(1,5)
         # vision
-        self.vision = 1
+        self.vision = np.random.randint(1,7)
         
     def move(self, r, c):
         # only move if target is empty
@@ -40,17 +42,22 @@ class Agent:
         self.env.field[r, c] = self.name
         self.r, self.c = r, c
 
-    def eat(self, r, c):
+    def eat(self, ):
         # take sugar at given spot and add to own sugar score
-        self.sugar += self.env.sugar[r,c,0]
-        self.env.sugar[r,c,0] = 0
+        self.sugar += self.env.sugar[self.r,self.c,0]
+        self.env.sugar[self.r,self.c,0] = 0
 
     def live(self, ):
-        # update attributes...
-        pass
+        # update attributes
+        self.sugar -= self.sugar_metabolism
+        if self.sugar <= 0:
+            print 'WOE IS ME!!'
+            # remove self from simulation
+            self.env.kill_agent(self)
 
     def greedy_strategy(self, ):
         # find best spot
+        # TODO: modify s.t. if many good spots, go to closest
         best_sugar = -1
         best_spot = None
         for r,c in self.env.get_neighborhood(self.r, self.c, self.vision):
@@ -61,11 +68,12 @@ class Agent:
 
         # move there and eat sugar
         self.move(*best_spot)
-        self.eat(*best_spot)
+        self.eat()
         
 
     def tick(self):
         self.greedy_strategy()
+        self.live()
     
     def get_color(self):
         pass

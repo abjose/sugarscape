@@ -46,7 +46,7 @@ class Viewer:
         #c = r*(256**2) + g*(256) + b
         #arr = np.ones((10,10), dtype=np.int)*c
         #arr = np.random.randint(0,255*255*255*255, (10,10))
-        #arr = scipy.ndimage.zoom(arr, 50, order=0)
+        #arr = scipy.ndimage.zoom(arr, self.pw, order=0)
         #pygame.surfarray.blit_array(self.surf, arr)
         #pygame.display.flip()
 
